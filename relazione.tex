@@ -14,7 +14,6 @@
 
 \tableofcontents
 
-
 \section{Introduzione}
 In questo esperimento si è cercato di riprodurre i risultati ottenuti da
 \href{http://kdd.cs.ksu.edu/Publications/Student/kallumadi2018aspect.pdf}{Gräßer et al. 2018}
@@ -40,7 +39,7 @@ ed esegue le seguenti azioni:
 	\item Apre i file del dataset (\textit{train} e \textit{test}) e ne estrae:
 	      le recensioni, dalle quali sono rimossi tutti i caratteri non alfabetici i quali
 	      vengono trasformati in minuscolo, e il voto da 1 a 10, che viene trasformato
-	      nella label della classe, "1" se il voto è $\geq7$, "-1" se è $\leq4$,
+	      nella label della classe, "1" se è $\geq7$, "-1" se è $\leq4$,
 	      altrimenti "0" per quelle comprese tra 4 e 7.
 	      (vedi funzione \texttt{load\_dataset})
 	\item Estrae le \textit{features} dalle recensioni utilizzando la classe
