@@ -1,3 +1,4 @@
 .vscode/
 *.tsv
 *.synctex.gz
+__pycache__/
