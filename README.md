@@ -10,4 +10,4 @@ Il progetto è implementato in `python3`, vengono usate le librerie:
 - `scikit-learn`
 
 ## Riproduzione dei risultati
-Per la riproduzione dei risultati basterà scaricare il dataset al link sopracitato, estrarlo nella stessa directory dei `main.py` ed eseguire lo script che mostrerà i risultati come output da console; in alternativa può essere modificato `main.py`, per specificare quali file usare come training set e test set, nelle righe dove viene chiamata la funzione `load_dataset`.
+Per la riproduzione dei risultati basta scaricare il dataset al link sopracitato, estrarlo nella stessa directory di `main.py` ed eseguire lo script che mostrerà i risultati come output da console; in alternativa può essere modificato `main.py`, per specificare quali file usare come training set e test set, nelle righe dove viene chiamata la funzione `load_dataset`.
