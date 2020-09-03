@@ -1,5 +1,5 @@
-# Analisi del sentimento se recensioni di farmaci
-Lo scopo del progetto è di utilizzare implementazioni di Naive Bayes per classificare delle recensioni di farmaci come descritto in [Gräßer et al. 2018](https://dl.acm.org/doi/10.1145/3194658.3194677).
+# Analisi del sentimento su recensioni di farmaci
+Lo scopo del progetto è di utilizzare classificatori Naive Bayes per classificare delle recensioni di farmaci come descritto in [Gräßer et al. 2018](https://dl.acm.org/doi/10.1145/3194658.3194677).
 
 ## Dataset
 I datasets utilizzato è reperibile al link: https://archive.ics.uci.edu/ml/datasets/Drug+Review+Dataset+%28Drugs.com%29.
