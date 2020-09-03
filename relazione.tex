@@ -1,0 +1,107 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[colorlinks=true, urlcolor=cyan, linkcolor=black]{hyperref}
+
+\title{Analisi del sentimento}
+\author{Marco Frassineti - 6301351}
+\date{}
+
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+
+\section{Introduzione}
+In questo esperimento si è cercato di riprodurre i risultati ottenuti da
+\href{http://kdd.cs.ksu.edu/Publications/Student/kallumadi2018aspect.pdf}{Gräßer et al. 2018}
+per l'analisi del sentimento su recensioni di farmaci. Sono state utilizzate le implementazioni
+di Naive Bayes Bernoulli e Multinomiale fornite da \texttt{scikit-learn} in python
+per la classificazione delle recensioni secondo il metodo descritto nell'articolo.
+I modelli sono valutati misurando \textit{accuratezza} e \textit{Kappa di Cohen}.
+
+\subsection{Dataset}
+Si è utilizzato il dataset reperibile su
+\href{https://archive.ics.uci.edu/ml/datasets/Drug+Review+Dataset+%28Drugs.com%29}{UCI}
+per allenare e testare i classificatori. Il dataset comprende 215063 campioni composti da
+una recensione testuale, una valutazione da 1 a 10 data dall'utente e altri attributi che
+verranno ignorati in questo esperimento.
+In base alla valutazione dell'utente si andranno ad identificare tre classi usate per
+la classificazione con Naive Bayes.
+Il dataset é già suddiviso in partizioni di \textit{train} (75\%) e \textit{test} (25\%).
+
+\subsection{Codice}
+Il codice, scritto in python, fa uso delle librerie \texttt{panda} e \texttt{scikit-learn}
+ed esegue le seguenti azioni:
+\begin{enumerate}
+	\item Apre i file del dataset (\textit{train} e \textit{test}) e ne estrae:
+	      le recensioni, dalle quali sono rimossi tutti i caratteri non alfabetici i quali
+	      vengono trasformati in minuscolo, e il voto da 1 a 10, che viene trasformato
+	      nella label della classe, "1" se il voto è $\geq7$, "-1" se è $\leq4$,
+	      altrimenti "0" per quelle comprese tra 4 e 7.
+	      (vedi funzione \texttt{load\_dataset})
+	\item Estrae le \textit{features} dalle recensioni utilizzando la classe
+	      \texttt{CountVectorized} di \texttt{scikit-learn}, come descritto nell'articolo
+	      sono state utilizzate parole, bigram, e trigram (usando il parametro
+	      \texttt{ngram\_range}) e sono state ignorate le \textit{features} che appaiono
+	      con frequenza maggiore dell'80\% (tramite il parametro \texttt{max\_df}).\\
+	      Così facendo si ottiene la \textit{document-term matrix} che indica le frequenze
+	      con cui appaiono le varie \textit{features} nelle recensioni.
+	\item Esegue una 5-fold cross-validation per determinare il miglior valore per
+	      l'iperparametro $\alpha$ di Naive Bayes (parametro di \textit{additive smoothing}
+	      per casi estremi in cui determinate parole non si presentano nel train set,
+	      se $\alpha=1$ si ha \textit{Laplace Smoothing} altrimenti si ha
+	      \textit{Lidstone smoothing}).
+	\item Crea il classificatore, \texttt{BernoulliNB} o \texttt{MultinomialNB}, passando
+	      l'iperparametro ottenuto precedentemente e lo allena passando la
+	      \textit{document-term matrix} e le \textit{label} del dataset di allenamento,
+	      successivamente prova a predirre il dataset di test e ne calcola
+	      \textit{accuratezza} e \textit{Kappa di Cohen}.
+\end{enumerate}
+
+\section{Risultati}
+Di seguito sono riportati i risultati ottenuti in questo esperimento e i dati ottenuti da
+\textit{Gräßer et al. 2018} che usa \textit{Logistic Regression} per la classificazione.
+Per l'iperparametro i valori migliori trovati con la 5-fold cross-validation sono:
+\begin{itemize}
+	\item $\alpha=0.4$ per Bernoulli Naive Bayes
+	\item $\alpha=0.6$ per Multinomial Naive Bayes
+\end{itemize}
+Per quanto riguarda accuratezza e Kappa di Cohen si può osservare come il modello multinomiale
+dia risultati migliori rispetto al modello di Bernoulli, ma entrambi risultino inferiori
+se confrontati con i risultati ottenuti nell'articolo citato.
+
+\begin{center}
+	\begin{tabular}{ l c c }
+		\hline
+		                   & Accuratezza & Kappa di Cohen \\
+		\hline
+		BernoulliNB        & 87.46       & 71.87          \\
+		\hline
+		MultinomialNB      & 89.90       & 77.98          \\
+		\hline
+		\hline
+		Gräßer et al. 2018 & 92.24       & 83.99          \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\section{Uso del codice}
+Per riprodurre i risultati ottenuti basta eseguire lo script \texttt{main.py} con python3,
+assicurandosi che nella stessa directory siano presenti i due file del dataset
+(\texttt{drugsComTrain\_raw.tsv} e \texttt{drugsComTest\_raw.tsv}), in alternativa è possibile
+specificare i file modificando le righe \texttt{75} e \texttt{78} di \texttt{main.py}.
+I risultati verranno mostrati come output su console.
+
+\section{Riferimenti}
+\begin{enumerate}
+	\item F. Gräßer, S. Kallumadi, H. Malberg, and S. Zaunseder. (2018). Aspect-Based Sentiment Analysis of Drug Reviews Applying Cross-Domain and Cross-Data Learning.
+	      \url{https://dl.acm.org/doi/10.1145/3194658.3194677}
+	\item scikit-learn: \url{https://scikit-learn.org/stable/modules/naive_bayes.html}
+	\item panda: \url{https://pandas.pydata.org/pandas-docs/stable/user_guide/index.html}
+\end{enumerate}
+
+\end{document}
